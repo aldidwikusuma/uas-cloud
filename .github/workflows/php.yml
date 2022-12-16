@@ -54,5 +54,5 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
-            cd /home/nico/aws-s3-memebank
+            cd /home/zalfa/uas-cloud
             sudo docker-compose up -d
