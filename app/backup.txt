@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UAS</title>
+</head>
+
+<body>
+  <form action="upload.php" method="post" enctype="multipart/form-data">
+    <input type="file" name="file" accept="image/png, image/gif, image/jpeg">
+    <button type="submit" name="submit">UPLOAD</button>
+  </form>
+
+  <?php
+
+  use Aws\S3\S3Client;
+
+  require 'vendor/autoload.php';
+
+  $s3 = new S3Client([
+    'version' => 'latest',
+    'region'  => 'ap-southeast-1',
+    'endpoint' => 'https://s3.ap-southeast-1.amazonaws.com',
+    'credentials' => [
+      'key'    => 'AKIAULHRUF53UZ26GF7R',
+      'secret' => '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',
+    ],
+  ]);
+
+  $objects = $s3->getIterator('ListObjects', [
+    'Bucket' => 'utsawanaldi'
+  ]);
+
+  echo "<div class='row'>";
+  foreach ($objects as $object) {
+    echo "<div class='col-md-4'>";
+    echo '<img src="https://utsawanaldi.s3.ap-southeast-1.amazonaws.com/' . $object['Key'] . '" width="200" height="200" />';
+    echo "<a href='delete.php?file=" . $object['Key'] . "' class='btn btn-danger'>Delete</a>";
+    echo "</div>";
+  }
+  echo "</div>";
+
+  ?>
+</body>
+
+</html>
